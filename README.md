@@ -119,8 +119,9 @@
 * pipeline implementation: https://github.com/navaganeshr/infra-pipelines
 
 # Application Monitoring 
-* Prometheus Opertor and associated tools like kube-state metrics, nodeexporter , blackbox exporter is used to monitor the eks cluster components.
-* Applcations can also be monitored through prometheus if the instrumentation is implemented at the microservice level.
+* Cluster and application monitoring is crucial for any organization whose applications run on clusters. Any problem with the cluster can lead to a huge loss to the organization. 
+* For current implementation, Prometheus Opertor and associated tools like kube-state metrics, nodeexporter , blackbox exporter are used to monitor the eks cluster components.
+* Applcations related metrics can also be monitored through prometheus if the instrumentation is implemented at the microservice level.
 
 ### About Prometheus Operator
 * Prometheus Operator uses CRD (Custom Resource Definitions) to generate configuration files and identify Prometheus resources.
@@ -131,11 +132,69 @@
     * servicemonitors – determines which services should be monitored
 * The operator monitors Prometheus resources and generates StatefullSet (Prometheus and Alertmanager) and configuration files (prometheus.yaml, alertmanager.yaml).
 
+* Current operator chart deploys following components 
+    * Prometheus Operator
+    * Prometheus
+    * Alertmanager
+    * Prometheus node-exporter
+    * kube-state-metrics
+    * Grafana
 
+#### **Prometheus Architecture**
+![Prometheus Components](img/prom-arch.jpg "Title")
+#### **Prometheus Components**
+![Prometheus Components](img/prometheus_components.png "Title")
+#### **Prometheus Operator Workflow**
+![Prometheus Operator Architecture](img/prometheus-op-architecture.png "Title")
+
+
+#### **Features**
+1. All configuration are stored in declarative manner.
 ### Cluster Monitoring 
+Cluster is monitored using the Prometheus stack. Deployment is done through helm chart 
 
 
+#### **Cluster Metrics**
+![Cluster Metrics](img/ClusterMetrics.png "Title")
 ### Application Monitoring 
+#### **Application Metrics**
 
-# service monitors: 
-* 
+![Cluster Metrics](img/app-metrics.png "Title")
+## **service monitors**: 
+* Service monitors that describe and manage monitoring targets to be scraped by Prometheus. The Prometheus resource connects to ServiceMonitors using a **serviceMonitorSelector** field. This way Prometheus sees what targets (apps) have to be scraped.
+
+### Exmaple implementation of service monitor for application
+
+* **Service Monitor Definition for app**
+```
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: nodejs-hello-world
+  labels:
+    env: dev
+    release: monitoring-stack
+spec:
+  selector:
+    matchLabels:
+      app: rpc-app
+  endpoints:
+  - port: web
+```
+
+* **Prometheus config for selecting targets**
+
+```
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+  metadata:
+    name: prometheus
+spec:
+  serviceAccountName: prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      release: monitoring-stack
+  resources:
+    requests:
+      memory: 400Mi
+```
