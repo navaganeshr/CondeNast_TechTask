@@ -198,3 +198,8 @@ spec:
     requests:
       memory: 400Mi
 ```
+## How is Prometheus opertor is Deployed ?
+- Prom Opertor helm chart is deployed though jenkins. 
+references: 
+  - Jenkins pipeline: https://github.com/navaganeshr/platform-pipelines
+  - helm chart : https://github.com/navaganeshr/platform-tools
