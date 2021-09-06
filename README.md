@@ -31,7 +31,7 @@
 ![Process Overview](img/CICD_Process.png "Title")
 
 #### **CICD Process**
-    Developer pushes the code to his branch and triggers the jenkins job. Jenkins builds, tests and containerizes the app and at last it will deploy it to dev namespace under the dev cluster. This is more of a happy path, which happens if all criterias are met.
+Developer pushes the code to his branch and triggers the jenkins job. Jenkins builds, tests and containerizes the app and at last it will deploy it to dev namespace under the dev cluster. This is more of a happy path, which happens if all criterias are met.
 
 **Note:** 
 * The job can be tuned to fail the CICD process if the app dosent meets the required criteria
