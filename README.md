@@ -110,6 +110,14 @@
 
 5. Template is workspaced, same template can be used to bootstrap multiple cluster using multiple workspaces.
 
+6. Provisioning is done using jenkins pipeline.
+
+#### **Infra Pipeline Stages**
+![Infra Pipeline Stages](img/Infra_pipeline.png "Title")
+### Refernces
+* Terraform template: https://github.com/navaganeshr/eks_cluster
+* pipeline implementation: https://github.com/navaganeshr/infra-pipelines
+
 # Application Monitoring 
 * Prometheus Opertor and associated tools like kube-state metrics, nodeexporter , blackbox exporter is used to monitor the eks cluster components.
 * Applcations can also be monitored through prometheus if the instrumentation is implemented at the microservice level.
